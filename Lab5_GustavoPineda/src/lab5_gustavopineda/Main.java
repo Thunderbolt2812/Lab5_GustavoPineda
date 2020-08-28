@@ -6,6 +6,7 @@
 package lab5_gustavopineda;
 
 import java.awt.Color;
+import javax.swing.DefaultListModel;
 import javax.swing.JColorChooser;
 
 /**
@@ -36,14 +37,14 @@ public class Main extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         tf_apellido = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        tf_nacionalidad = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         s_edad = new javax.swing.JSpinner();
         jLabel8 = new javax.swing.JLabel();
         rb_m = new javax.swing.JRadioButton();
         rb_f = new javax.swing.JRadioButton();
         jLabel9 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        tf_vocacion = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         rb_simon = new javax.swing.JRadioButton();
         rb_noviembre = new javax.swing.JRadioButton();
@@ -141,6 +142,11 @@ public class Main extends javax.swing.JFrame {
         rb_nega.setText("Negativo");
 
         jButton1.setText("Agregar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel14.setText("Agregar Persona");
@@ -165,7 +171,7 @@ public class Main extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jd_personaLayout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(tf_nacionalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jd_personaLayout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -194,7 +200,7 @@ public class Main extends javax.swing.JFrame {
                             .addGroup(jd_personaLayout.createSequentialGroup()
                                 .addComponent(jLabel9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1))))
+                                .addComponent(tf_vocacion))))
                     .addGroup(jd_personaLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -223,7 +229,7 @@ public class Main extends javax.swing.JFrame {
                         .addGap(23, 23, 23)
                         .addGroup(jd_personaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tf_nacionalidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jd_personaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel7)
@@ -236,7 +242,7 @@ public class Main extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jd_personaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel9)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(tf_vocacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jd_personaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
@@ -416,13 +422,16 @@ public class Main extends javax.swing.JFrame {
         jLabel20.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel20.setText("Lista de Hombres");
 
+        jl_hombres1.setModel(new DefaultListModel());
         jScrollPane6.setViewportView(jl_hombres1);
 
+        jl_mujeres1.setModel(new DefaultListModel());
         jScrollPane7.setViewportView(jl_mujeres1);
 
         jLabel22.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel22.setText("Lista de Paises");
 
+        jl_paises1.setModel(new DefaultListModel());
         jScrollPane8.setViewportView(jl_paises1);
 
         jLabel25.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
@@ -546,6 +555,39 @@ public class Main extends javax.swing.JFrame {
         jd_pais.setVisible(true);
     }//GEN-LAST:event_jb_agregarPaActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        DefaultListModel modelo = (DefaultListModel) jl_hombres1.getModel();
+        DefaultListModel modelo2 = (DefaultListModel) jl_mujeres1.getModel();
+        String titulo;
+        String covid;
+        if (rb_simon.isSelected()) {
+            titulo = "Verdadero";
+        } else {
+            titulo = "Falso";
+        }
+        if (rb_pos.isSelected()) {
+            covid = "Positivo";
+        } else {
+            covid = "Negativo";
+        }
+        if (rb_m.isSelected()) {
+            String genero = "Masculino";
+            Persona x = new Persona(tf_nacionalidad.getText(), tf_nombreP.getText(), tf_apellido.getText(), (Integer) s_edad.getValue(), genero, tf_vocacion.getText(), titulo, covid);
+            modelo.addElement(x);
+        } else {
+            String genero = "Femenino";
+            Persona x = new Persona(tf_nacionalidad.getText(), tf_nombreP.getText(), tf_apellido.getText(), (Integer) s_edad.getValue(), genero, tf_vocacion.getText(), titulo, covid);
+            modelo2.addElement(x);
+        }
+        jl_hombres1.setModel(modelo);
+        jl_mujeres1.setModel(modelo2);
+        tf_nombreP.setText("");
+        tf_nacionalidad.setText("");
+        tf_apellido.setText("");
+        s_edad.setValue(0);
+        tf_vocacion.getText();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -614,8 +656,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTree jTree1;
     private javax.swing.JTree jTree2;
     private javax.swing.JButton jb_agregarP;
@@ -653,7 +693,9 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JSpinner s_edad;
     private javax.swing.JTextField tf_apellido;
     private javax.swing.JTextField tf_himno;
+    private javax.swing.JTextField tf_nacionalidad;
     private javax.swing.JTextField tf_nombreP;
     private javax.swing.JTextField tf_nombrePa;
+    private javax.swing.JTextField tf_vocacion;
     // End of variables declaration//GEN-END:variables
 }
