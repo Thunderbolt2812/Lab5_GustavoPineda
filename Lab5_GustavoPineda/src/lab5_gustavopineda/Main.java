@@ -97,7 +97,7 @@ public class Main extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jt_paises = new javax.swing.JTree();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTree2 = new javax.swing.JTree();
+        jt_covid = new javax.swing.JTree();
         jButton3 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -473,8 +473,8 @@ public class Main extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jt_paises);
 
         treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Paises");
-        jTree2.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        jScrollPane2.setViewportView(jTree2);
+        jt_covid.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jScrollPane2.setViewportView(jt_covid);
 
         jButton3.setText("---->");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -621,7 +621,36 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        DefaultComboBoxModel mc = (DefaultComboBoxModel) cb_pais.getModel();
+        DefaultComboBoxModel m = (DefaultComboBoxModel) cb_personas.getModel();
+        DefaultTreeModel modeloC = (DefaultTreeModel) jt_covid.getModel();
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloC.getRoot();
+        cb_pais.getSelectedIndex();
+        String nombre = cb_pais.getSelectedItem().toString();
+        String genero = ((Persona) m.getSelectedItem()).getGenero();
+
+        int centinela = -1;
+        for (int i = 0; i < raiz.getChildCount(); i++) {
+            if (raiz.getChildAt(i).toString().equals(nombre)) {
+                if (((Persona) m.getSelectedItem()).getCovid().equals("Positivo")) {
+                    DefaultMutableTreeNode p = new DefaultMutableTreeNode(cb_personas.getSelectedItem());
+                    ((DefaultMutableTreeNode) raiz.getChildAt(i)).add(p);
+                    centinela = 1;
+                }
+            }
+        }
+
+        if (centinela == -1) {
+            DefaultMutableTreeNode n = new DefaultMutableTreeNode(nombre);
+            if (((Persona) m.getSelectedItem()).getCovid().equals("Positivo")) {
+                DefaultMutableTreeNode p = new DefaultMutableTreeNode(cb_personas.getSelectedItem());
+                n.add(p);
+            }
+            raiz.add(n);
+        }
+
+        jd_arbol.setVisible(false);
+        modeloC.reload();
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jb_colorbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_colorbActionPerformed
@@ -711,7 +740,7 @@ public class Main extends javax.swing.JFrame {
         cb_pais.getSelectedIndex();
         String nombre = cb_pais.getSelectedItem().toString();
         String genero = ((Persona) m.getSelectedItem()).getGenero();
-                
+
         int centinela = -1;
         for (int i = 0; i < raiz.getChildCount(); i++) {
             if (raiz.getChildAt(i).toString().equals(nombre)) {
@@ -727,20 +756,7 @@ public class Main extends javax.swing.JFrame {
             n.add(p);
             raiz.add(n);
         }
-        int centinela2=-1;
-        for (int i = 0; i < raiz2.getChildCount(); i++) {
-            if (raiz2.getChildAt(i).toString().equals(genero)) {
-                DefaultMutableTreeNode j = new DefaultMutableTreeNode(cb_personas.getSelectedItem());
-                ((DefaultMutableTreeNode) raiz2.getChildAt(i)).add(j);
-                centinela2 = 1;
-            }
-        }
-        if (centinela2 == -1) {
-            DefaultMutableTreeNode f = new DefaultMutableTreeNode(genero);
-            DefaultMutableTreeNode g = new DefaultMutableTreeNode(cb_personas.getSelectedItem());
-            f.add(g);
-            raiz2.add(f);
-        }
+
         jd_arbol.setVisible(false);
         modeloA.reload();
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -783,7 +799,7 @@ public class Main extends javax.swing.JFrame {
         DefaultTreeModel m = (DefaultTreeModel) jt_paises.getModel();
         persona_seleccionada.setNombre(JOptionPane.showInputDialog("Ingrese Nombre"));
         m.reload();
-                
+
     }//GEN-LAST:event_popup1_modificarActionPerformed
 
     private void popup2_modificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popup2_modificarActionPerformed
@@ -812,7 +828,7 @@ public class Main extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         //</editor-fold>
 
         /* Create and display the form */
@@ -858,7 +874,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
-    private javax.swing.JTree jTree2;
     private javax.swing.JButton jb_agregarP;
     private javax.swing.JButton jb_agregarPa;
     private javax.swing.JButton jb_colorb;
@@ -870,6 +885,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JList<String> jl_hombres1;
     private javax.swing.JList<String> jl_mujeres1;
     private javax.swing.JList<String> jl_pais;
+    private javax.swing.JTree jt_covid;
     private javax.swing.JTree jt_paises;
     private javax.swing.JPopupMenu popup1;
     private javax.swing.JMenuItem popup1_agregar;
