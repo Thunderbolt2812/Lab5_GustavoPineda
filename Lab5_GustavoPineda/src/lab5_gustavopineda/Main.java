@@ -361,18 +361,38 @@ public class Main extends javax.swing.JFrame {
         popup1.add(popup1_agregar);
 
         popup1_modificar.setText("Modificar");
+        popup1_modificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popup1_modificarActionPerformed(evt);
+            }
+        });
         popup1.add(popup1_modificar);
 
         popup1_eliminar.setText("Eliminar");
+        popup1_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popup1_eliminarActionPerformed(evt);
+            }
+        });
         popup1.add(popup1_eliminar);
 
         popup2_agregar.setText("Agregar");
         popup2.add(popup2_agregar);
 
         popup2_modificar.setText("modificar");
+        popup2_modificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popup2_modificarActionPerformed(evt);
+            }
+        });
         popup2.add(popup2_modificar);
 
         popup2_eliminar.setText("eliminar");
+        popup2_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popup2_eliminarActionPerformed(evt);
+            }
+        });
         popup2.add(popup2_eliminar);
 
         popup3_agregar.setText("Agregar");
@@ -445,6 +465,11 @@ public class Main extends javax.swing.JFrame {
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Paises");
         jt_paises.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jt_paises.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jt_paisesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jt_paises);
 
         treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Paises");
@@ -634,13 +659,13 @@ public class Main extends javax.swing.JFrame {
             covid = "Negativo";
         }
         if (rb_m.isSelected()) {
-            String genero = "Masculino";
+            String genero = "Hombre";
             Persona x = new Persona(tf_nacionalidad.getText(), tf_nombreP.getText(), tf_apellido.getText(), (Integer) s_edad.getValue(), genero, tf_vocacion.getText(), titulo, covid);
             modelo.addElement(x);
             DefaultComboBoxModel m = (DefaultComboBoxModel) cb_personas.getModel();
             m.addElement(x);
         } else {
-            String genero = "Femenino";
+            String genero = "Mujer";
             Persona x = new Persona(tf_nacionalidad.getText(), tf_nombreP.getText(), tf_apellido.getText(), (Integer) s_edad.getValue(), genero, tf_vocacion.getText(), titulo, covid);
             modelo2.addElement(x);
             DefaultComboBoxModel m = (DefaultComboBoxModel) cb_personas.getModel();
@@ -677,20 +702,24 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        
+
         DefaultComboBoxModel mc = (DefaultComboBoxModel) cb_pais.getModel();
-        DefaultTreeModel modeloARBOL = (DefaultTreeModel) jt_paises.getModel();
-        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloARBOL.getRoot();
+        DefaultComboBoxModel m = (DefaultComboBoxModel) cb_personas.getModel();
+        DefaultTreeModel modeloA = (DefaultTreeModel) jt_paises.getModel();
+        DefaultMutableTreeNode raiz = (DefaultMutableTreeNode) modeloA.getRoot();
+        DefaultMutableTreeNode raiz2 = (DefaultMutableTreeNode) raiz.getRoot();
         cb_pais.getSelectedIndex();
         String nombre = cb_pais.getSelectedItem().toString();
+        String genero = ((Persona) m.getSelectedItem()).getGenero();
+                
         int centinela = -1;
         for (int i = 0; i < raiz.getChildCount(); i++) {
             if (raiz.getChildAt(i).toString().equals(nombre)) {
                 DefaultMutableTreeNode p = new DefaultMutableTreeNode(cb_personas.getSelectedItem());
                 ((DefaultMutableTreeNode) raiz.getChildAt(i)).add(p);
                 centinela = 1;
-            } 
-        }  
+            }
+        }
 
         if (centinela == -1) {
             DefaultMutableTreeNode n = new DefaultMutableTreeNode(nombre);
@@ -698,13 +727,74 @@ public class Main extends javax.swing.JFrame {
             n.add(p);
             raiz.add(n);
         }
+        int centinela2=-1;
+        for (int i = 0; i < raiz2.getChildCount(); i++) {
+            if (raiz2.getChildAt(i).toString().equals(genero)) {
+                DefaultMutableTreeNode j = new DefaultMutableTreeNode(cb_personas.getSelectedItem());
+                ((DefaultMutableTreeNode) raiz2.getChildAt(i)).add(j);
+                centinela2 = 1;
+            }
+        }
+        if (centinela2 == -1) {
+            DefaultMutableTreeNode f = new DefaultMutableTreeNode(genero);
+            DefaultMutableTreeNode g = new DefaultMutableTreeNode(cb_personas.getSelectedItem());
+            f.add(g);
+            raiz2.add(f);
+        }
         jd_arbol.setVisible(false);
-        modeloARBOL.reload();
+        modeloA.reload();
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void jt_paisesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jt_paisesMouseClicked
+        if (evt.isMetaDown()) {
+            int row = jt_paises.getClosestRowForLocation(
+                    evt.getX(), evt.getY());
+            jt_paises.setSelectionRow(row);
+            Object v1
+                    = jt_paises.getSelectionPath().
+                            getLastPathComponent();
+            nodo_seleccionado = (DefaultMutableTreeNode) v1;
+            if (nodo_seleccionado.getUserObject() instanceof Persona) {
+                persona_seleccionada = (Persona) nodo_seleccionado.getUserObject();
+                popup1.show(evt.getComponent(),
+                        evt.getX(), evt.getY());
+            }
+            if (nodo_seleccionado.getUserObject() instanceof Pais) {
+                pais_seleccionado = (Pais) nodo_seleccionado.getUserObject();
+                popup2.show(evt.getComponent(),
+                        evt.getX(), evt.getY());
+            }
+        }
+    }//GEN-LAST:event_jt_paisesMouseClicked
+
+    private void popup1_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popup1_eliminarActionPerformed
+        DefaultTreeModel m = (DefaultTreeModel) jt_paises.getModel();
+        m.removeNodeFromParent(nodo_seleccionado);
+        m.reload();
+    }//GEN-LAST:event_popup1_eliminarActionPerformed
+
+    private void popup2_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popup2_eliminarActionPerformed
+        DefaultTreeModel m = (DefaultTreeModel) jt_paises.getModel();
+        m.removeNodeFromParent(nodo_seleccionado);
+        m.reload();
+    }//GEN-LAST:event_popup2_eliminarActionPerformed
+
+    private void popup1_modificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popup1_modificarActionPerformed
+        DefaultTreeModel m = (DefaultTreeModel) jt_paises.getModel();
+        persona_seleccionada.setNombre(JOptionPane.showInputDialog("Ingrese Nombre"));
+        m.reload();
+                
+    }//GEN-LAST:event_popup1_modificarActionPerformed
+
+    private void popup2_modificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popup2_modificarActionPerformed
+        DefaultTreeModel m = (DefaultTreeModel) jt_paises.getModel();
+        pais_seleccionado.setNombre(JOptionPane.showInputDialog("Ingrese nuevo nombre del pais"));
+        m.reload();
+    }//GEN-LAST:event_popup2_modificarActionPerformed
+
     /**
-         * @param args the command line arguments
-         */
+     * @param args the command line arguments
+     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -713,27 +803,21 @@ public class Main extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Main.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        
+        //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Main().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Main().setVisible(true);
         });
     }
 
@@ -818,4 +902,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTextField tf_vocacion;
     // End of variables declaration//GEN-END:variables
     Color color;
+    DefaultMutableTreeNode nodo_seleccionado;
+    Persona persona_seleccionada;
+    Pais pais_seleccionado;
 }
