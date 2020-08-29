@@ -399,18 +399,38 @@ public class Main extends javax.swing.JFrame {
         popup3.add(popup3_agregar);
 
         popup3_modificar.setText("Modificar");
+        popup3_modificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popup3_modificarActionPerformed(evt);
+            }
+        });
         popup3.add(popup3_modificar);
 
         popup3_eliminar.setText("Eliminar");
+        popup3_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popup3_eliminarActionPerformed(evt);
+            }
+        });
         popup3.add(popup3_eliminar);
 
         popup4_agregar.setText("Agregar");
         popup4.add(popup4_agregar);
 
         popup4_modificar.setText("Modificar");
+        popup4_modificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popup4_modificarActionPerformed(evt);
+            }
+        });
         popup4.add(popup4_modificar);
 
         popup4_eliminar.setText("Eliminar");
+        popup4_eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                popup4_eliminarActionPerformed(evt);
+            }
+        });
         popup4.add(popup4_eliminar);
 
         jButton4.setText("Agregar al Arbol");
@@ -474,6 +494,11 @@ public class Main extends javax.swing.JFrame {
 
         treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Paises");
         jt_covid.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jt_covid.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jt_covidMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jt_covid);
 
         jButton3.setText("---->");
@@ -740,20 +765,33 @@ public class Main extends javax.swing.JFrame {
         cb_pais.getSelectedIndex();
         String nombre = cb_pais.getSelectedItem().toString();
         String genero = ((Persona) m.getSelectedItem()).getGenero();
-
+        DefaultMutableTreeNode h = new DefaultMutableTreeNode("Hombres");
+        DefaultMutableTreeNode mu = new DefaultMutableTreeNode("Mujeres");
         int centinela = -1;
         for (int i = 0; i < raiz.getChildCount(); i++) {
             if (raiz.getChildAt(i).toString().equals(nombre)) {
                 DefaultMutableTreeNode p = new DefaultMutableTreeNode(cb_personas.getSelectedItem());
-                ((DefaultMutableTreeNode) raiz.getChildAt(i)).add(p);
+                if (((Persona) m.getSelectedItem()).getGenero().equals("Hombre")) {
+                    h.add(p);
+                } else if(((Persona) m.getSelectedItem()).getGenero().equals("Mujer")) {
+                    mu.add(p);
+                }
                 centinela = 1;
             }
         }
 
         if (centinela == -1) {
             DefaultMutableTreeNode n = new DefaultMutableTreeNode(nombre);
+            h = new DefaultMutableTreeNode("Hombres");
+            mu = new DefaultMutableTreeNode("Mujeres");
             DefaultMutableTreeNode p = new DefaultMutableTreeNode(cb_personas.getSelectedItem());
-            n.add(p);
+            n.add(h);
+            n.add(mu);
+            if (((Persona) m.getSelectedItem()).getGenero().equals("Hombre")) {
+                h.add(p);
+            } else if(((Persona) m.getSelectedItem()).getGenero().equals("Mujer")) {
+                mu.add(p);
+            }
             raiz.add(n);
         }
 
@@ -807,6 +845,50 @@ public class Main extends javax.swing.JFrame {
         pais_seleccionado.setNombre(JOptionPane.showInputDialog("Ingrese nuevo nombre del pais"));
         m.reload();
     }//GEN-LAST:event_popup2_modificarActionPerformed
+
+    private void jt_covidMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jt_covidMouseClicked
+        if (evt.isMetaDown()) {
+            int row = jt_covid.getClosestRowForLocation(
+                    evt.getX(), evt.getY());
+            jt_covid.setSelectionRow(row);
+            Object v2 = jt_covid.getSelectionPath().getLastPathComponent();
+            nodo_seleccionado = (DefaultMutableTreeNode) v2;
+            if (nodo_seleccionado.getUserObject() instanceof Persona) {
+                persona_seleccionada = (Persona) nodo_seleccionado.getUserObject();
+                popup3.show(evt.getComponent(),
+                        evt.getX(), evt.getY());
+            }
+            if (nodo_seleccionado.getUserObject() instanceof Pais) {
+                pais_seleccionado = (Pais) nodo_seleccionado.getUserObject();
+                popup4.show(evt.getComponent(),
+                        evt.getX(), evt.getY());
+            }
+        }
+    }//GEN-LAST:event_jt_covidMouseClicked
+
+    private void popup3_modificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popup3_modificarActionPerformed
+        DefaultTreeModel m = (DefaultTreeModel) jt_covid.getModel();
+        pais_seleccionado.setNombre(JOptionPane.showInputDialog("Ingrese nuevo nombre del pais"));
+        m.reload();
+    }//GEN-LAST:event_popup3_modificarActionPerformed
+
+    private void popup3_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popup3_eliminarActionPerformed
+        DefaultTreeModel m = (DefaultTreeModel) jt_covid.getModel();
+        m.removeNodeFromParent(nodo_seleccionado);
+        m.reload();
+    }//GEN-LAST:event_popup3_eliminarActionPerformed
+
+    private void popup4_modificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popup4_modificarActionPerformed
+        DefaultTreeModel m = (DefaultTreeModel) jt_covid.getModel();
+        pais_seleccionado.setNombre(JOptionPane.showInputDialog("Ingrese nuevo nombre de la persona"));
+        m.reload();
+    }//GEN-LAST:event_popup4_modificarActionPerformed
+
+    private void popup4_eliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_popup4_eliminarActionPerformed
+        DefaultTreeModel m = (DefaultTreeModel) jt_covid.getModel();
+        m.removeNodeFromParent(nodo_seleccionado);
+        m.reload();
+    }//GEN-LAST:event_popup4_eliminarActionPerformed
 
     /**
      * @param args the command line arguments
